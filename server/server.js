@@ -8,6 +8,8 @@ import mongoose from "mongoose";
 import authRoutes from "./routes/authRoutes.js";
 import noteRoutes from "./routes/noteRoutes.js";
 
+const PORT = process.env.PORT || 5000;
+
 dotenv.config();
 console.log("JWT_SECRET:", process.env.JWT_SECRET);
 
@@ -25,7 +27,14 @@ const io = new Server(server, {
   },
 });
 
-app.use(cors());
+// app.use(cors());
+app.use(
+  cors({
+    origin: process.env.CLIENT_URL,
+    credentials: true,
+  })
+);
+
 app.use(express.json());
 
 mongoose.connect(process.env.MONGO_URI);
@@ -44,4 +53,4 @@ io.on("connection", (socket) => {
   });
 });
 
-server.listen(5000, () => console.log("Server running"));
+server.listen(PORT, () => console.log("Server running"));

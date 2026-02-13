@@ -34,20 +34,6 @@ export const getNotes = async (req, res) => {
 };
 
 
-//Working 
-// export const getNotes = async (req, res) => {
-//   const notes = await Note.find({
-//     $or: [
-//       { owner: req.user.id },
-//       { "collaborators.user": req.user.id },
-//     ],
-//   })
-//     .populate("collaborators.user", "email");
-
-//   res.json(notes);
-// };
-
-
 export const updateNote = async (req, res) => {
   try {
     const note = await Note.findById(req.params.id);
@@ -108,21 +94,6 @@ export const deleteNote = async (req, res) => {
   res.json({ msg: "Note deleted" });
 };
 
-// export const deleteNote = async (req, res) => {
-//   if (req.user.role === "viewer")
-//     return res.status(403).json({ msg: "Viewers cannot delete notes" });
-
-//   await Note.findByIdAndDelete(req.params.id);
-
-//   await Activity.create({
-//     user: req.user.id,
-//     action: "delete",
-//     note: req.params.id,
-//   });
-
-//   res.json({ msg: "Deleted" });
-// };
-
 export const searchNotes = async (req, res) => {
   const q = req.query.q;
 
@@ -176,11 +147,6 @@ export const getActivityLogs = async (req, res) => {
 
   res.json(logs);
 };
-
-// export const getActivityLogs = async (req, res) => {
-//   const logs = await Activity.find({ user: req.user.id }).populate("note");
-//   res.json(logs);
-// };
 
 export const addCollaborator = async (req, res) => {
   try {
@@ -241,55 +207,3 @@ export const addCollaborator = async (req, res) => {
     res.status(500).json({ msg: err.message });
   }
 };
-
-
-
-// export const addCollaborator = async (req, res) => {
-//   try {
-//     const { email, role } = req.body;
-
-//     if (!email || !role)
-//       return res.status(400).json({ msg: "Email and role required" });
-
-//     const note = await Note.findById(req.params.id);
-
-//     if (!note) return res.status(404).json({ msg: "Note not found" });
-
-//     // only owner or admin/editor can add
-//     if (
-//       note.owner.toString() !== req.user.id &&
-//       req.user.role === "viewer"
-//     ) {
-//       return res.status(403).json({ msg: "Not allowed" });
-//     }
-
-//     const userToAdd = await User.findOne({ email });
-
-//     if (!userToAdd)
-//       return res.status(404).json({ msg: "User not found" });
-
-//     // const alreadyExists = note.collaborators.find(
-//     //   (c) => c.user.toString() === userToAdd._id.toString()
-//     // );
-
-//     if (alreadyExists)
-//       return res.status(400).json({ msg: "Already a collaborator" });
-
-//     note.collaborators.push({
-//       user: userToAdd._id,
-//       role,
-//     });
-
-//     await note.save();
-
-//     await Activity.create({
-//       user: req.user.id,
-//       action: "share",
-//       note: note._id,
-//     });
-
-//     res.json({ msg: "Collaborator added" });
-//   } catch (err) {
-//     res.status(500).json({ msg: err.message });
-//   }
-// };
