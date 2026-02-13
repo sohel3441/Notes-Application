@@ -1,0 +1,26 @@
+# dependencies
+node_modules
+
+# env files
+.env
+
+# logs
+logs
+*.log
+npm-debug.log*
+
+# runtime files
+tmp
+temp
+*.pid
+
+# coverage
+coverage
+
+# system files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode
+.idea
